@@ -1,4 +1,6 @@
-FROM sumglobal/rpi-alpine:3.4
+FROM sumglobal/armv7hf-alpine-qemu:3.4
+RUN [ "cross-build-start" ]
+
 MAINTAINER Charles Walker <cwalker@sumglobal.com>
 
 # Default to UTF-8 file.encoding
@@ -21,3 +23,5 @@ RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community" >> /etc/apk/reposit
     curl \
     openjdk8-jre-base \
     && rm /var/cache/apk/*
+
+RUN [ "cross-build-end" ]  
