@@ -1,5 +1,6 @@
-FROM resin/rpi-raspbian:jessie
+FROM resin/armv7hf-debian-qemu:latest
 MAINTAINER Charles Walker <cwalker@sumglobal.com>
+RUN [ "cross-build-start" ]
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
@@ -10,6 +11,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     unzip \
     xz-utils \
   && rm -rf /var/lib/apt/lists/*
+
+RUN echo 'deb http://deb.debian.org/debian jessie-backports main' > /etc/apt/sources.list.d/jessie-backports.list
 
 # Default to UTF-8 file.encoding
 ENV LANG C.UTF-8
@@ -28,17 +31,17 @@ RUN { \
 RUN ln -svT "/usr/lib/jvm/java-8-openjdk-$(dpkg --print-architecture)" /docker-java-home
 ENV JAVA_HOME /docker-java-home
 
-ENV JAVA_VERSION 8u40
-ENV JAVA_DEBIAN_VERSION 8u40~b04-2
+ENV JAVA_VERSION 8u131
+ENV JAVA_DEBIAN_VERSION 8u131-b11-1~bpo8+1
 
 # see https://bugs.debian.org/775775
 # and https://github.com/docker-library/java/issues/19#issuecomment-70546872
-ENV CA_CERTIFICATES_JAVA_VERSION 20140324
+ENV CA_CERTIFICATES_JAVA_VERSION 20161107~bpo8+1
 
 RUN set -ex; \
   \
   apt-get update; \
-  apt-get install -y \
+  apt-get install -y -t jessie-backports \
     openjdk-8-jdk="$JAVA_DEBIAN_VERSION" \
     ca-certificates-java="$CA_CERTIFICATES_JAVA_VERSION" \
   ; \
@@ -57,3 +60,5 @@ RUN /var/lib/dpkg/info/ca-certificates-java.postinst configure
 
 # If you're reading this and have any feedback on how this image could be
 # improved, please open an issue or a pull request so we can discuss it!
+
+RUN [ "cross-build-end" ]  
