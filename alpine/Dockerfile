@@ -1,4 +1,4 @@
-FROM sumglobal/armv7hf-alpine-qemu:3.4
+FROM sumglobal/armv7hf-alpine-qemu:edge
 RUN [ "cross-build-start" ]
 
 MAINTAINER Charles Walker <cwalker@sumglobal.com>
@@ -21,7 +21,7 @@ ENV PATH $PATH:/usr/lib/jvm/java-1.8-openjdk/jre/bin:/usr/lib/jvm/java-1.8-openj
 RUN echo "http://dl-4.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
     && apk add --update \
     curl \
-    openjdk8-jre-base \
+    openjdk8 \
     && rm /var/cache/apk/*
 
 RUN [ "cross-build-end" ]  
