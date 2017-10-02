@@ -38,7 +38,11 @@ ENV JAVA_DEBIAN_VERSION 8u131-b11-1~bpo8+1
 # and https://github.com/docker-library/java/issues/19#issuecomment-70546872
 ENV CA_CERTIFICATES_JAVA_VERSION 20161107~bpo8+1
 
+# deal with slim variants not having man page directories (which causes "update-alternatives" to fail)
 RUN set -ex; \
+  if [ ! -d /usr/share/man/man1 ]; then \
+    mkdir -p /usr/share/man/man1; \
+  fi; \
   \
   apt-get update; \
   apt-get install -y -t jessie-backports \
