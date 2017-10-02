@@ -2,6 +2,12 @@ FROM resin/armv7hf-debian-qemu:latest
 MAINTAINER Charles Walker <cwalker@sumglobal.com>
 RUN [ "cross-build-start" ]
 
+
+# deal with slim variants not having man page directories (which causes "update-alternatives" to fail)
+RUN set -ex; \
+	if [ ! -d /usr/share/man/man1 ]; then \
+		mkdir -p /usr/share/man/man1; \
+	fi;
 #
 # Pull Zulu OpenJDK binaries from official repository:
 #
